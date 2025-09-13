@@ -9,6 +9,7 @@
 
 #include "GUI/Screens/MainScreen.h"
 
+
 class QStackedWidget;
 
 namespace LPP::GUI::Windows {
@@ -21,6 +22,15 @@ namespace LPP::GUI::Windows {
         void switchScreen(const int s) const {
             mScreens->setCurrentIndex(s);
         };
+
+        int addScreen(QWidget *s) const {
+            return mScreens->addWidget(s);
+        };
+
+        int addScreenAtIndex(QWidget *s, const int i) const {
+            return mScreens->insertWidget(i, s);
+        };
+
     protected:
         QStackedWidget* mScreens;
         Screens::MainScreen *mMainScreen;
