@@ -1,32 +1,16 @@
 //
-// Created by DexrnZacAttack on 9/2/25 using zPc-i2.
+// Created by DexrnZacAttack on 9/12/25 using zPc-i2.
 //
-#include "EditScreen.h"
+#include "FSEditScreen.h"
 
-#include <fstream>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QListWidget>
-#include <QLabel>
 #include <QFileDialog>
-#include <QListWidgetItem>
 #include <QMessageBox>
 #include <QSplitter>
+#include <X11/Xlib.h>
 
-#include "GUI/Widgets/FileListWidget.h"
-#include "GUI/Widgets/FileListWidget.h"
-#include "Save/SaveFile.h"
-
-namespace LPP::GUI::Screens {
-    EditScreen::EditScreen(IO::FileType type, QWidget *parent) {
-        // main layout
-        QWidget* mainLayout = new QWidget();
-        this->mMainLayout = new QVBoxLayout(mainLayout);
-        setLayout(this->mMainLayout);
-
-        mMainLayout->setContentsMargins(0, 0, 0, 0);
-        mMainLayout->setSpacing(0);
-
+namespace LPP::GUI::Screens::Edit {
+    // I feel like this should be gutted out and have it's main init code moved to EditScreen
+    FSEditScreen::FSEditScreen(IO::FileType type, QWidget *parent) : EditScreen(type, parent) {
         QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
 
         // side layout
@@ -75,7 +59,7 @@ namespace LPP::GUI::Screens {
         this->mMainLayout->addWidget(splitter, 0);
     }
 
-    bool EditScreen::onChooseFileButton(IO::FileType type) {
+    bool FSEditScreen::onChooseFileButton(IO::FileType type) {
         // grab file
         QString fileName = QFileDialog::getOpenFileName(mFileList, "Choose a file");
 

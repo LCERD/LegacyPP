@@ -16,12 +16,12 @@ class QListWidget;
 class QListWidgetItem;
 class QGridLayout;
 
-namespace LPP::GUI::Screens {
+namespace LPP::GUI::Screens::Edit {
     class EditScreen : public QWidget {
         Q_OBJECT
     public:
         explicit EditScreen(IO::FileType type, QWidget *parent = nullptr);
-    private:
+    protected:
         QTabWidget *mTabs;
 
         QVBoxLayout *mMainLayout;
@@ -31,14 +31,13 @@ namespace LPP::GUI::Screens {
 
         // TODO: this is not flexible for things that aren't files, such as LOC strings.
         // I think we can just make a new Screen type that extends off of EditScreen (once we gut mFileList from it)
-        Widgets::FileListWidget *mFileList;
 
         // File List Toolbar
         QPushButton *mChooseFileButton;
         QPushButton *mAddFileButton;
 
     public slots:
-        bool onChooseFileButton(IO::FileType type);
+        virtual bool onChooseFileButton(IO::FileType type) = 0;
         // void onFileRightClicked(const QPoint &p);
     };
 }

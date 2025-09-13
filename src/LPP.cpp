@@ -8,7 +8,7 @@
 #include <QApplication>
 
 #include "libLCEExports.h"
-#include "GUI/Screens/EditScreen.h"
+#include "GUI/Screens/Edit/EditScreen.h"
 
 LPP::LegacyPlusPlus LPP::LegacyPlusPlus::sInstance = LegacyPlusPlus();
 

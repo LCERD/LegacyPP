@@ -7,8 +7,9 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "EditScreen.h"
+#include "Edit/EditScreen.h"
 #include "LPP.h"
+#include "Factory/EditScreenFactory.h"
 
 namespace LPP::GUI::Screens {
     MainScreen::MainScreen(QWidget *parent) {
@@ -48,7 +49,7 @@ namespace LPP::GUI::Screens {
     }
 
     void MainScreen::onChooseFileButton() {
-        EditScreen *s = new EditScreen(getFileType(), LegacyPlusPlus::sInstance.mainWindow);
+        Edit::EditScreen *s = Factory::sEditScreenFactory.create(getFileType(), LegacyPlusPlus::sInstance.mainWindow).release();
         if (s->onChooseFileButton(getFileType())) { // this is file picker, returns false if nothing was picked
             const int i = LegacyPlusPlus::sInstance.mainWindow->addScreen(s);
             LegacyPlusPlus::sInstance.mainWindow->switchScreen(i);
@@ -59,7 +60,7 @@ namespace LPP::GUI::Screens {
     }
 
     void MainScreen::onCreateNewFileButton() {
-        EditScreen *s = new EditScreen(getFileType(), LegacyPlusPlus::sInstance.mainWindow);
+        Edit::EditScreen *s = Factory::sEditScreenFactory.create(getFileType(), LegacyPlusPlus::sInstance.mainWindow).release();
         const int i = LegacyPlusPlus::sInstance.mainWindow->addScreen(s);
         LegacyPlusPlus::sInstance.mainWindow->switchScreen(i);
     }
