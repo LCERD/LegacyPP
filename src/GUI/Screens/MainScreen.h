@@ -24,10 +24,10 @@ namespace LPP::GUI::Screens {
 
         IO::FileType getFileType() const {
             switch (this->mTypeComboBox->currentIndex()) {
-                case 0: return IO::FileType::SAVE_FILE; // when we use for save button we will give choice to save w/ old save file
-                case 1: return IO::FileType::ARCHIVE;
-                case 2: return IO::FileType::SOUNDBANK;
-                default: return IO::FileType::BASIC;
+                case 0: return IO::eFileType::SAVE_FILE; // when we use for save button we will give choice to save w/ old save file
+                case 1: return IO::eFileType::ARCHIVE;
+                case 2: return IO::eFileType::SOUNDBANK;
+                default: return IO::eFileType::BASIC;
             }
         };
     private:

@@ -8,12 +8,11 @@ include(FetchContent)
 file(GLOB_RECURSE LegacyPlusPlusSrc CONFIGURE_DEPENDS
         "src/*.h"
         "src/*.cpp"
+        "src/*.rc"
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
 qt_standard_project_setup()
-
-option(LOCAL_LIBLCE "use local libLCE" OFF)
 
 # NFD
 # note: leftover from when I was using ImGui... is it really needed?
@@ -25,7 +24,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nfd)
 
 # libLCE
-if(!LOCAL_LIBLCE)
+option(LOCAL_LIBLCE "use local libLCE" OFF)
+
+message(STATUS "use local libLCE: ${LOCAL_LIBLCE}")
+
+if(NOT LOCAL_LIBLCE)
     FetchContent_Declare(
             LCE
             GIT_REPOSITORY https://github.com/DexrnZacAttack/libLCE.git
@@ -46,4 +49,7 @@ qt_add_executable(LegacyPlusPlus
 
 target_link_libraries(${PROJECT_NAME} PRIVATE LCE nfd Qt6::Core Qt6::Gui Qt6::Widgets)
 
-target_compile_definitions(LegacyPlusPlus PRIVATE LPP_VERSION="${PROJECT_VERSION}")
+target_compile_definitions(LegacyPlusPlus PRIVATE
+        LPP_VERSION="${PROJECT_VERSION}"
+        LPP_RC_VERSION=${PROJECT_VERSION_MAJOR},${PROJECT_VERSION_MINOR},${PROJECT_VERSION_PATCH}
+)

@@ -1,3 +1,7 @@
 
 /.idea
 /lib
+/cmake-build-debug
+/cmake-build-debug-windows
+/cmake-build-release-windows
+/cmake-build-release

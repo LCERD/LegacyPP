@@ -6,7 +6,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSplitter>
-#include <X11/Xlib.h>
 
 namespace LPP::GUI::Screens::Edit {
     // I feel like this should be gutted out and have it's main init code moved to EditScreen
@@ -79,17 +78,17 @@ namespace LPP::GUI::Screens::Edit {
                 lce::fs::Filesystem *file;
                 switch (type) {
                     default:
-                    case IO::FileType::BASIC:
+                    case IO::eFileType::BASIC:
                         file = new lce::fs::Filesystem();
                         break;
-                    case IO::FileType::SAVE_FILE_OLD:
-                    case IO::FileType::SAVE_FILE:
+                    case IO::eFileType::SAVE_FILE_OLD:
+                    case IO::eFileType::SAVE_FILE:
                         file = lce::save::SaveFileCommons::deserializeAuto(bytes);
                         break;
-                    case IO::FileType::ARCHIVE:
+                    case IO::eFileType::ARCHIVE:
                         file = new lce::arc::Archive(bytes);
                         break;
-                    case IO::FileType::SOUNDBANK:
+                    case IO::eFileType::SOUNDBANK:
                         if (!lce::msscmp::Soundbank::isSoundbank(bytes.data())) {
                             QMessageBox::critical(this, "Invalid File", "This file is not a valid MSSCMP file");
                             return false;

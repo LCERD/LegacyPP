@@ -3,6 +3,7 @@
 //
 #ifndef LEGACYPLUSPLUS_EDITSCREENFACTORY_H
 #define LEGACYPLUSPLUS_EDITSCREENFACTORY_H
+
 #include "../GUI/Screens/Edit/EditScreen.h"
 #include "../GUI/Screens/Edit/FSEditScreen.h"
 
@@ -23,11 +24,11 @@ namespace LPP::Factory {
 
         // gotta use map instead of unordered_map otherwise I get some destructor weirdness
         std::map<IO::FileType, EditScreenCreator> mCreators {
-            EDITSCREEN_ADD_CREATOR(IO::FileType::BASIC, GUI::Screens::Edit::FSEditScreen),
-            EDITSCREEN_ADD_CREATOR(IO::FileType::SAVE_FILE, GUI::Screens::Edit::FSEditScreen),
-            EDITSCREEN_ADD_CREATOR(IO::FileType::SAVE_FILE_OLD, GUI::Screens::Edit::FSEditScreen),
-            EDITSCREEN_ADD_CREATOR(IO::FileType::ARCHIVE, GUI::Screens::Edit::FSEditScreen),
-            EDITSCREEN_ADD_CREATOR(IO::FileType::SOUNDBANK, GUI::Screens::Edit::FSEditScreen)
+            EDITSCREEN_ADD_CREATOR(IO::eFileType::BASIC, GUI::Screens::Edit::FSEditScreen),
+            EDITSCREEN_ADD_CREATOR(IO::eFileType::SAVE_FILE, GUI::Screens::Edit::FSEditScreen),
+            EDITSCREEN_ADD_CREATOR(IO::eFileType::SAVE_FILE_OLD, GUI::Screens::Edit::FSEditScreen),
+            EDITSCREEN_ADD_CREATOR(IO::eFileType::ARCHIVE, GUI::Screens::Edit::FSEditScreen),
+            EDITSCREEN_ADD_CREATOR(IO::eFileType::SOUNDBANK, GUI::Screens::Edit::FSEditScreen)
         };
     };
 
