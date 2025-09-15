@@ -14,15 +14,6 @@ file(GLOB_RECURSE LegacyPlusPlusSrc CONFIGURE_DEPENDS
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
 qt_standard_project_setup()
 
-# NFD
-# note: leftover from when I was using ImGui... is it really needed?
-FetchContent_Declare(
-        nfd
-        GIT_REPOSITORY https://github.com/btzy/nativefiledialog-extended.git
-        GIT_TAG        master
-)
-FetchContent_MakeAvailable(nfd)
-
 # libLCE
 option(LOCAL_LIBLCE "use local libLCE" OFF)
 
@@ -47,7 +38,7 @@ qt_add_executable(LegacyPlusPlus
         ${LegacyPlusPlusSrc}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE LCE nfd Qt6::Core Qt6::Gui Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE LCE Qt6::Core Qt6::Gui Qt6::Widgets)
 
 if(APPLE)
     set_target_properties(LegacyPlusPlus PROPERTIES
