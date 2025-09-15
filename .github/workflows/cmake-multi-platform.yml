@@ -134,9 +134,13 @@ jobs:
         run: >
           cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} ${{ matrix.build_settings }}
 
-      - name: Move libLCE (Linux, macOS)
-        if: matrix.os != 'windows-latest' && matrix.os != 'windows-11-arm'
+      - name: Move libLCE (Linux)
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-24.04-arm'
         run: find "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/_deps/lce-build" -type f \( -iname "*.so" -o -iname "*.dylib" \) -exec mv {} "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}" \;
+
+      - name: Run CMake Install (macOS)
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        run: cmake --install ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} ${{ matrix.build_settings }}
 
       - name: Upload Artifact (Linux)
         uses: actions/upload-artifact@v4
@@ -153,8 +157,7 @@ jobs:
         with:
           name: ${{ matrix.platform_name }}-${{ matrix.compiler_name }}_${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/libLCE.dylib
-            ${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/LegacyPlusPlus
+            ${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/LegacyPlusPlus.app
 
       - name: Upload Artifact (Windows)
         uses: actions/upload-artifact@v4

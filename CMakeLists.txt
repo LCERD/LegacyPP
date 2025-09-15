@@ -49,6 +49,19 @@ qt_add_executable(LegacyPlusPlus
 
 target_link_libraries(${PROJECT_NAME} PRIVATE LCE nfd Qt6::Core Qt6::Gui Qt6::Widgets)
 
+if(APPLE)
+    set_target_properties(LegacyPlusPlus PROPERTIES
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.dexrnzacattack.LegacyPlusPlus"
+
+            MACOSX_BUNDLE_BUNDLE_NAME "Legacy++"
+
+            MACOSX_BUNDLE_COPYRIGHT "DexrnZacAttack, Legacy Console Edition Research & Development"
+    )
+    install(TARGETS LCE LIBRARY DESTINATION Frameworks)
+endif()
+
+
 target_compile_definitions(LegacyPlusPlus PRIVATE
         LPP_VERSION="${PROJECT_VERSION}"
         LPP_RC_VERSION=${PROJECT_VERSION_MAJOR},${PROJECT_VERSION_MINOR},${PROJECT_VERSION_PATCH}
