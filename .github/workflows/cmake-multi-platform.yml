@@ -135,7 +135,8 @@ jobs:
           cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} ${{ matrix.build_settings }}
 
       - name: Move libLCE (Linux, macOS)
-        run: mv ${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/_deps/lce-build/*.{so,dylib} .
+        if: matrix.os != 'windows-latest' && matrix.os != 'windows-11-arm'
+        run: find "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/_deps/lce-build" -type f \( -iname "*.so" -o -iname "*.dylib" \) -exec mv {} "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}" \;
 
       - name: Upload Artifact (Linux)
         uses: actions/upload-artifact@v4
