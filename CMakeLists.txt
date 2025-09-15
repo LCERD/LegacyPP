@@ -58,7 +58,7 @@ if(APPLE)
 
             MACOSX_BUNDLE_COPYRIGHT "DexrnZacAttack, Legacy Console Edition Research & Development"
     )
-    install(TARGETS LCE LIBRARY DESTINATION Frameworks)
+    install(TARGETS LCE LIBRARY DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/LegacyPlusPlus.app/Contents/Frameworks")
 endif()
 
 
