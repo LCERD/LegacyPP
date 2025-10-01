@@ -13,11 +13,13 @@ namespace LPP::GUI::Screens::Edit {
     public:
         explicit FSEditScreen(IO::FileType type, QWidget *parent = nullptr);
 
+        bool canSaveInPlace() override;
     private:
         Widgets::FileListWidget *mFileList;
 
     private slots:
         bool onChooseFileButton(IO::FileType type) override;
+        void onSaveFileButton() override;
     };
 }
 

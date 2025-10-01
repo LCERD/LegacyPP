@@ -7,7 +7,7 @@
 namespace LPP::IO {
     class FileType {
     public:
-        constexpr FileType(int id, bool savable) : mId(id), mIsSavable(savable) {}
+        constexpr FileType(const int id, const bool savable) : mId(id), mIsSavable(savable) {}
 
         constexpr bool isSavable() const { return mIsSavable; }
         constexpr operator int() const { return mId; }

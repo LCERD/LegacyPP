@@ -4,6 +4,7 @@
 #include "MainScreen.h"
 
 #include <QLabel>
+#include <QMenuBar>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -53,6 +54,8 @@ namespace LPP::GUI::Screens {
         if (s->onChooseFileButton(getFileType())) { // this is file picker, returns false if nothing was picked
             const int i = LegacyPlusPlus::sInstance.mainWindow->addScreen(s);
             LegacyPlusPlus::sInstance.mainWindow->switchScreen(i);
+
+            s->initMenuBar();
         } else {
             s->setParent(nullptr); // dunno if this works like I want it to, since I have high doubts that the parent will ever delete this object, I decided to set the parent to null here and manage it ourselves
             delete s;
@@ -61,7 +64,10 @@ namespace LPP::GUI::Screens {
 
     void MainScreen::onCreateNewFileButton() {
         Edit::EditScreen *s = Factory::sEditScreenFactory.create(getFileType(), LegacyPlusPlus::sInstance.mainWindow).release();
+
         const int i = LegacyPlusPlus::sInstance.mainWindow->addScreen(s);
         LegacyPlusPlus::sInstance.mainWindow->switchScreen(i);
+
+        s->initMenuBar();
     }
 }

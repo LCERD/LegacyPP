@@ -6,6 +6,14 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSplitter>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QCloseEvent>
+
+#include "LPP.h"
+#include "GUI/Dialogs/SimpleDialog.h"
+#include "Save/SaveFile.h"
+#include "IO/Serializable.h"
 
 namespace LPP::GUI::Screens::Edit {
     // I feel like this should be gutted out and have it's main init code moved to EditScreen
@@ -58,19 +66,29 @@ namespace LPP::GUI::Screens::Edit {
         this->mMainLayout->addWidget(splitter, 0);
     }
 
+    bool FSEditScreen::canSaveInPlace() {
+        if (!mFileList)
+            return false;
+
+        if (!mFileList->getPath())
+            return false;
+
+        return mFileList->getFileType().isSavable();
+    }
+
     bool FSEditScreen::onChooseFileButton(IO::FileType type) {
         // grab file
-        QString fileName = QFileDialog::getOpenFileName(mFileList, "Choose a file");
+        QString *fileName = new QString(QFileDialog::getOpenFileName(mFileList, "Choose a file")); // hope this isn't a bad idea
 
-        if (!fileName.isEmpty()) {
+        if (!fileName->isEmpty()) {
             // clear so that we don't have duplicates
             mFileList->clear();
             mTabs->clear();
 
             // read
-            std::ifstream stream(fileName.toStdString(), std::ifstream::binary);
+            std::ifstream stream(fileName->toStdString(), std::ifstream::binary);
 
-            std::vector<uint8_t> bytes(std::filesystem::file_size(fileName.toStdString()));
+            std::vector<uint8_t> bytes(std::filesystem::file_size(fileName->toStdWString()));
             stream.read(reinterpret_cast<char *>(bytes.data()), bytes.size());
 
             try {
@@ -119,14 +137,54 @@ namespace LPP::GUI::Screens::Edit {
 
                 // create list items in file list
                 // TODO: this should read files and directories (recursively) instead of seeing all top level items as a file
-                this->mFileList->create(file);
+                this->mFileList->createFromPhysical(fileName, file);
             } catch (const std::exception& e) {
                 // Too Bad!
-                std::string err = "Exception thrown whilst trying to read '" + fileName.toStdString() + "': " + e.what();
+                std::string err = "Exception thrown whilst trying to read '" + fileName->toStdString() + "': " + e.what();
                 QMessageBox::critical(mFileList, "Error", err.c_str());
             }
             return true;
         }
         return false;
+    }
+
+    void FSEditScreen::onSaveFileButton() {
+        if (!canSaveInPlace())
+            return;
+
+        const std::filesystem::path p = std::filesystem::path(mFileList->getPath()->toStdWString());
+
+        Dialog::SimpleDialog* saving = new Dialog::SimpleDialog(this);
+        saving->setWindowTitle("Saving");
+        saving->setBody(QString::fromStdString("Saving " + p.filename().string()));
+        saving->setModal(true);
+        saving->setWindowFlags((saving->windowFlags() | Qt::CustomizeWindowHint) & ~ (Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint));
+        saving->setAttribute(Qt::WA_DeleteOnClose);
+        saving->open();
+
+        QFuture<bool> f = QtConcurrent::run([this, p]() {
+            switch (mFileList->getFileType()) {
+                default:
+                case IO::eFileType::SOUNDBANK:
+                case IO::eFileType::BASIC:
+                    return false;
+                case IO::eFileType::SAVE_FILE_OLD:
+                case IO::eFileType::SAVE_FILE:
+                case IO::eFileType::ARCHIVE: {
+                    const lce::io::Serializable *f = dynamic_cast<lce::io::Serializable*>(this->mFileList->getFilesystem());
+
+                    if (!f) return false;
+
+                    f->writeFile(p);
+
+                    return true;
+                }
+            }
+        });
+
+        // the all-seeing eye
+        QFutureWatcher<bool>* w = new QFutureWatcher<bool>(this);
+        w->setFuture(f);
+        connect(w, &QFutureWatcher<bool>::finished, saving, &QDialog::close);
     }
 }

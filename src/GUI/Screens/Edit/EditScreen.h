@@ -21,6 +21,12 @@ namespace LPP::GUI::Screens::Edit {
         Q_OBJECT
     public:
         explicit EditScreen(IO::FileType type, QWidget *parent = nullptr);
+
+        void initMenuBar();
+
+        void hideEvent(QHideEvent *event) override;
+
+        virtual bool canSaveInPlace();
     protected:
         QTabWidget *mTabs;
 
@@ -29,15 +35,14 @@ namespace LPP::GUI::Screens::Edit {
         QVBoxLayout *mLeftLayout;
         QGridLayout *mRightLayout;
 
-        // TODO: this is not flexible for things that aren't files, such as LOC strings.
-        // I think we can just make a new Screen type that extends off of EditScreen (once we gut mFileList from it)
-
         // File List Toolbar
         QPushButton *mChooseFileButton;
         QPushButton *mAddFileButton;
 
     public slots:
         virtual bool onChooseFileButton(IO::FileType type) = 0;
+        // TODO: check if modified and update accordingly
+        virtual void onSaveFileButton() = 0;
         // void onFileRightClicked(const QPoint &p);
     };
 }

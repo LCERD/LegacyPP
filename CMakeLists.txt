@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(LegacyPlusPlus VERSION 1.1.1 LANGUAGES CXX)
+project(LegacyPlusPlus VERSION 1.1.2 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -11,7 +11,7 @@ file(GLOB_RECURSE LegacyPlusPlusSrc CONFIGURE_DEPENDS
         "src/*.rc"
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Concurrent)
 qt_standard_project_setup()
 
 # libLCE
@@ -38,7 +38,7 @@ qt_add_executable(LegacyPlusPlus
         ${LegacyPlusPlusSrc}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE LCE Qt6::Core Qt6::Gui Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE LCE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Concurrent)
 
 if(APPLE)
     set_target_properties(LegacyPlusPlus PROPERTIES
@@ -51,7 +51,6 @@ if(APPLE)
     )
     install(TARGETS LCE LIBRARY DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/LegacyPlusPlus.app/Contents/Frameworks")
 endif()
-
 
 target_compile_definitions(LegacyPlusPlus PRIVATE
         LPP_VERSION="${PROJECT_VERSION}"

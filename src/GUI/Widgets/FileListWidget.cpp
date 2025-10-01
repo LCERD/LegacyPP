@@ -28,6 +28,11 @@ namespace LPP::GUI::Widgets {
         this->refreshItems();
     }
 
+    void FileListWidget::createFromPhysical(QString *path, lce::fs::Filesystem *fs) {
+        this->mCurrentPath = path;
+        this->create(fs);
+    }
+
     void FileListWidget::exportObject(const lce::fs::FSObject *o) {
         if (!o)
             return;
@@ -82,6 +87,18 @@ namespace LPP::GUI::Widgets {
         this->mFs->getRoot()->forEachRecursive([&](const std::wstring &n, lce::fs::FSObject &o) {
             addObject(n, o);
         });
+    }
+
+    IO::FileType FileListWidget::getFileType() const {
+        return mType;
+    }
+
+    lce::fs::Filesystem * FileListWidget::getFilesystem() const {
+        return this->mFs;
+    }
+
+    QString * FileListWidget::getPath() const {
+        return this->mCurrentPath;
     }
 
     void FileListWidget::onFileDoubleClicked(const QTreeWidgetItem *item) {
@@ -224,7 +241,7 @@ namespace LPP::GUI::Widgets {
 
         if (dirs.size() > 1) {
             QMessageBox dialog(QMessageBox::Icon::Critical, "Can't add file", "More than one directory is selected.");
-            dialog.exec();
+            dialog.open();
             return;
         }
 

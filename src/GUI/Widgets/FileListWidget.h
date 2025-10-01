@@ -19,17 +19,25 @@ namespace LPP::GUI::Widgets {
 
         void create(lce::fs::Filesystem *fs);
 
+        void createFromPhysical(QString *path, lce::fs::Filesystem *fs);
+
         void exportObject(const lce::fs::FSObject *o);
 
         void addObject(const std::wstring &n, lce::fs::FSObject &o);
 
         void refreshItems();
+
+        IO::FileType getFileType() const;
+
+        lce::fs::Filesystem *getFilesystem() const;
+
+        QString *getPath() const;
     private:
         // what the fuck is QMap, why not use stl map?
         QMap<QString, QTreeWidgetItem*> mPaths;
         lce::fs::Filesystem *mFs;
         IO::FileType mType;
-        // lce::fs::Directory *mRoot;
+        QString *mCurrentPath = nullptr;
 
     private slots:
         void onFileDoubleClicked(const QTreeWidgetItem *item);

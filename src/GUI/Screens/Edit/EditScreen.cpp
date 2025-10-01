@@ -12,8 +12,10 @@
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QSplitter>
+#include <QToolBar>
 
-#include "GUI/Widgets/FileListWidget.h"
+#include "LPP.h"
+#include "GUI/Toolbars/EditScreenMenuBar.h"
 #include "GUI/Widgets/FileListWidget.h"
 #include "Save/SaveFile.h"
 
@@ -26,5 +28,21 @@ namespace LPP::GUI::Screens::Edit {
 
         mMainLayout->setContentsMargins(0, 0, 0, 0);
         mMainLayout->setSpacing(0);
+    }
+
+    void EditScreen::initMenuBar() {
+        MenuBars::EditScreenMenuBar *toolbar = new MenuBars::EditScreenMenuBar(this);
+        LegacyPlusPlus::sInstance.mainWindow->setMenuBar(toolbar);
+    }
+
+    void EditScreen::hideEvent(QHideEvent *event) {
+        QWidget::hideEvent(event);
+
+        if (QMenuBar *bar = LegacyPlusPlus::sInstance.mainWindow->menuBar())
+            bar->hide();
+    }
+
+    bool EditScreen::canSaveInPlace() {
+        return false;
     }
 }
