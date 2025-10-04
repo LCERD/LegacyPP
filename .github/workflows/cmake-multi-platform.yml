@@ -67,12 +67,12 @@ jobs:
             compiler_name: GCC
             c_compiler: gcc
             cpp_compiler: g++
-          - os: macos-13
+          - os: macos-15-intel
             platform_name: macOS x86_64
             compiler_name: Clang
             c_compiler: clang
             cpp_compiler: clang++
-          - os: macos-13
+          - os: macos-15-intel
             platform_name: macOS x86_64
             compiler_name: GCC
             c_compiler: gcc
@@ -92,7 +92,7 @@ jobs:
             c_compiler: cl
           - os: macos-latest
             c_compiler: cl
-          - os: macos-13
+          - os: macos-15-intel
             c_compiler: cl
 
     steps:
@@ -139,15 +139,15 @@ jobs:
         run: find "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/_deps/lce-build" -type f \( -iname "*.so" -o -iname "*.dylib" \) -exec mv {} "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}" \;
 
       - name: Run CMake Install (macOS)
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos-15-intel'
         run: cmake --install ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} ${{ matrix.build_settings }}
 
       - name: Fix CI folder structure (macOS)
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos-15-intel'
         run: touch "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/.gitignore"
 
       - name: QT Deploy (macOS)
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos-15-intel'
         run: macdeployqt "${{ github.workspace }}/cmake-build-${{ matrix.build_type }}-${{ matrix.c_compiler }}/LegacyPlusPlus.app"
 
       - name: QT Deploy (Windows)
@@ -165,7 +165,7 @@ jobs:
 
       - name: Upload Artifact (macOS)
         uses: actions/upload-artifact@v4
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos-15-intel'
         with:
           name: ${{ matrix.platform_name }}-${{ matrix.compiler_name }}_${{ matrix.build_type }}
           path: |
