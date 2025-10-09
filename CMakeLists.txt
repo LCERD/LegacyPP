@@ -43,7 +43,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE LCE Qt6::Core Qt6::Gui Qt6::Widget
 if(APPLE)
     set_target_properties(LegacyPlusPlus PROPERTIES
             MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.dexrnzacattack.LegacyPlusPlus"
+            MACOSX_BUNDLE_GUI_IDENTIFIER "me.dexrn.LegacyPlusPlus"
 
             MACOSX_BUNDLE_BUNDLE_NAME "Legacy++"
 
